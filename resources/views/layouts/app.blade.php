@@ -26,6 +26,17 @@
                     </div>
                 </header>
             @endif
+{{-- flash-message --}}
+            @session('notice')
+                <div class="p-4 items-center bg-blue-500 text-white font-bold">
+                    <div class="text-center text-white font-bold">
+                        {{ session('notice') }}
+                    </div>
+                </div>
+            @endsession
+
+
+
 
             <!-- Page Content -->
             <main>

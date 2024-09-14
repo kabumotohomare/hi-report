@@ -66,6 +66,7 @@ class ReportController extends Controller
             if (!Storage::putFileAs('images/reports', $file, $report->image)) {
                 throw new \Exception('写真の保存に失敗しました。');
             }
+            session()->flash('notice', '報告を登録しました。');
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -97,6 +98,7 @@ class ReportController extends Controller
         if ($history->isDirty()) {
             // 変更あり (新しい履歴)
             $history->replicate()->save();
+            session()->flash('notice', '状況を登録しました');
         } else {
             // 変更なし (日付のみ更新)
             $history->updated_at = now();
