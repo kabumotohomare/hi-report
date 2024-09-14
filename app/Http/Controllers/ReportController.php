@@ -18,18 +18,28 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
+        $reports = Report::all()->sortBy('reported_at');
+
+        return view('reports.index', compact('reports'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
+
+    public function edit(Report $report)
+    {
+        $categories = Category::all();
+        $statuses = Status::all();
+        $reasons = Reason::all();
+        return view('reports.edit', compact('categories', 'statuses', 'reasons', 'report'));
+    }
+
     public function create()
     {
         $categories = Category::all();
         $statuses = Status::all();
         $reasons = Reason::all();
-
         return view('reports.create', compact('categories', 'statuses', 'reasons'));
     }
 
@@ -73,13 +83,6 @@ class ReportController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

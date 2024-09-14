@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Report extends Model
 {
@@ -20,4 +23,37 @@ class Report extends Model
         'contact',
         'reported_at',
     ];
+    protected $casts = [
+        'reported_at' => 'datetime'
+    ];
+    /* 
+     * Relation
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function latestHistory()
+    {
+        return $this->hasOne(ReportStatusHistory::class)->ofMany('updated_at', 'max');
+    }
+    /*
+     * Accessor
+     */
+    public function categoryName(): Attribute
+    {
+        return Attribute::get(fn () => $this->category->name);
+    }
+    public function statusName(): Attribute
+    {
+        return Attribute::get(fn () => $this->latestHistory->status->name);
+    }
+    public function reasonName(): Attribute
+    {
+        return Attribute::get(fn () => $this->latestHistory->reason?->name);  // reasonはnullがあり得る
+    }
+    public function imagePath(): Attribute
+   {
+       return Attribute::get(fn () => Storage::url('images/reports/' . $this->image));
+   }
 }
