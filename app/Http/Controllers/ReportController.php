@@ -87,9 +87,22 @@ class ReportController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Report $report)
     {
-        //
+               // 履歴を受け取ったデータで上書き
+        $history = $report->latestHistory->fill($request->all());
+        $history->user_id = auth()->id();
+
+        // 変更があるか確認
+        if ($history->isDirty()) {
+            // 変更あり (新しい履歴)
+            $history->replicate()->save();
+        } else {
+            // 変更なし (日付のみ更新)
+            $history->updated_at = now();
+            $history->save();
+        }
+        return redirect()->route('reports.index');
     }
 
     /**
