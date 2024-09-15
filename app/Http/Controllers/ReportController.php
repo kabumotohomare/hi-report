@@ -18,11 +18,13 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::all();
+
         
-        $reports = Report::all()->sortBy('reported_at');
+        $params = $request->query();
+        $reports = Report::search($params)->orderBy('reported_at')->get();
 
         return view('reports.index', compact('reports', 'categories'));
     }
