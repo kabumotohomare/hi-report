@@ -26,6 +26,20 @@
                     </div>
                 </header>
             @endif
+
+            {{-- validation-errors --}}
+            @if ($errors->any())
+                <div class="p-4 items-center bg-red-500 text-white font-bold">
+                    <p>
+                        <b>{{ count($errors) }}件のエラーがあります。</b>
+                    </p>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 {{-- flash-message --}}
             @session('notice')
                 <div class="p-4 items-center bg-blue-500 text-white font-bold">

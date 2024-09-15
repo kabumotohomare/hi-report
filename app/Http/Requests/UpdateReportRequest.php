@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreReportRequest extends FormRequest
+class UpdateReportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,12 +14,6 @@ class StoreReportRequest extends FormRequest
         return true;
     }
 
-    public function prepareForValidation()
-    {
-        $this->merge([
-            'location' => (empty($this->latitude) || empty($this->longitude)) ? null : true,
-        ]);
-    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,16 +22,6 @@ class StoreReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "category_id" => "required|exists:categories,id",
-            "image" => "required|image",
-            //"latitude" => "required",
-            //"longitude" => "required",
-            "location" => "required",
-            "detail" => "required",
-            //ロケーションは必須です
-            "email" => "nullable|email:rfc,dns",
-            "contact" => "nullable",
-            "reported_at" => "nullable|date",
             "status_id" => "sometimes|required|exists:statuses,id",
             "comment" => "nullable",
             "start_date" => "nullable|date",
@@ -46,17 +30,9 @@ class StoreReportRequest extends FormRequest
             "reason_id" => "nullable|required_if:status_id,5|prohibited_unless:status_id,5|exists:reasons,id",
         ];
     }
-
     public function attributes(): array
     {
         return [
-            'category_id'   => 'カテゴリー',
-            'image'         => '写真',
-            'location'      => '場所',
-            'detail'        => '内容',
-            'email'         => 'メールアドレス',
-            'contact'       => '連絡先',
-            'reported_at'   => '報告日',
             'status_id'     => '対応状況',
             'reason_id'     => '非対応理由',
             'comment'       => 'コメント',
@@ -66,6 +42,7 @@ class StoreReportRequest extends FormRequest
             'completed_at'  => '対応完了日',
         ];
     }
+
     public function messages()
     {
         return [
@@ -75,5 +52,4 @@ class StoreReportRequest extends FormRequest
             'reason_id.prohibited_unless' => '対応状況が「非対応」でない限り、:Attributeの入力は禁止されています。',
         ];
     }
-
 }
