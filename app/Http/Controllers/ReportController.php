@@ -20,9 +20,11 @@ class ReportController extends Controller
      */
     public function index()
     {
+        $categories = Category::all();
+        
         $reports = Report::all()->sortBy('reported_at');
 
-        return view('reports.index', compact('reports'));
+        return view('reports.index', compact('reports', 'categories'));
     }
 
     /**

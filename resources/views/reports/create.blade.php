@@ -34,6 +34,21 @@
             const lng = document.getElementById('longitude');
             let clicked;
             let marker;
+            // バリデーションエラー時のピン立て
+            if (lat.value && lng.value) {
+                clicked = true;
+                marker = L.marker([lat.value, lng.value], {
+                    draggable: true
+                }).addTo(map);
+
+                marker.on('dragend', function(event) {
+                    const position = marker.getLatLng();
+
+                    lat.value = position.lat;
+                    lng.value = position.lng;
+                });
+            }
+
             // クリックでピン立て
             map.on('click', function(e) {
                 if (clicked !== true) {

@@ -3,6 +3,23 @@
         {{ _('報告一覧') }}
     @endslot
 
+
+    {{-- 検索部分 --}}
+    <div class="max-w-4xl mx-auto mt-5">
+        <div class=" bg-white shadow-sm sm:rounded-lg p-6">
+            <form action="{{ route('reports.index') }}">
+                カテゴリー
+                @foreach ($categories as $category)
+                    <input type="checkbox" name="category_id[]" value="{{ $category->id }}">
+                    {{ $category->name }}
+                @endforeach
+                <div>
+                    <input type="submit" value="再検索">
+                </div>
+            </form>
+        </div>
+    </div>
+
     {{-- 一覧表示 --}}
     <div class="max-w-4xl mx-auto mt-5">
         <div class="bg-white shadow-sm sm:rounded-lg p-6">
