@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\SearchReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Category;
 use App\Models\Reason;
@@ -18,15 +18,15 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(SearchReportRequest $request)
     {
         $categories = Category::all();
+        $statuses = Status::all();
 
-        
         $params = $request->query();
         $reports = Report::search($params)->orderBy('reported_at')->get();
 
-        return view('reports.index', compact('reports', 'categories'));
+        return view('reports.index', compact('reports', 'categories', 'statuses'));
     }
 
     /**
